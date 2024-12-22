@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PATLAK BIRD GAME</title>
+    <link rel="icon" href="görsel/icon.png" type="image/png" />
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Başlık veya Logo -->
+    <div id="gameTitle">Oyun Linki: patlak31.github.io/31</div>
+
+    <div id="game-container">
+        <canvas id="gameCanvas"></canvas>
+        <button id="restartButton" onclick="restartGame()">Yeniden Başla</button>
+    </div>
+
+    <!-- Alt metin -->
+    <div id="footerText">dc regalchips</div>
+
+    <audio id="pipePassSound" src="görsel/ayy.mp3" preload="auto"></audio>
+    <audio id="gameOverSound" src="görsel/gg.mp3" preload="auto"></audio>
+    <audio id="backgroundMusic" src="görsel/music.mp3" preload="auto"></audio>
+
+    <script src="script.js"></script>
+</body>
+</html>

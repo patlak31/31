@@ -1,0 +1,79 @@
+/* Genel Stil */
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-image: url('görsel/background.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    -webkit-user-select: none; /* Safari ve Chrome için */
+    -moz-user-select: none; /* Firefox için */
+    -ms-user-select: none; /* Internet Explorer için */
+    user-select: none; /* Genel tarayıcılar için */
+}
+
+/* Oyun alt metninin stili */
+#footerText {
+    position: absolute;
+    bottom: 20px; /* Ekranın altına 20px mesafe */
+    left: 50%; /* Ekranın ortasına yatay olarak yerleştir */
+    transform: translateX(-50%); /* Tam ortalamak için */
+    font-size: 24px;
+    font-weight: bold;
+    color: #ffffff; /* Beyaz metin */
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5); /* Metni daha belirgin hale getirmek için gölge */
+}
+
+
+/* Oyun başlığının stili */
+#gameTitle {
+    position: absolute;
+    top: 10px;
+    font-size: 24px;
+    font-weight: bold;
+    color: rgb(0, 0, 0);
+    z-index: 10;
+}
+
+/* Oyun alanının konteyneri */
+#game-container {
+    position: relative;
+    width: 320px; /* Sabit genişlik */
+    height: 480px; /* Sabit yükseklik */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(71, 90, 93, 0.734);
+    border: 5px solid rgba(27, 27, 27, 0.318);
+    border-radius: 25px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+}
+
+/* Canvas ayarları */
+canvas {
+    display: block;
+    width: 100%;  /* Ekran boyutuna uyumlu */
+    height: 100%; /* Ekran boyutuna uyumlu */
+}
+
+/* Yeniden Başla butonu */
+#restartButton {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 25px;
+    padding: 20px 40px;
+    display: none;
+    border-radius: 15px;
+    background-color: rgba(38, 38, 38, 0.97);
+    color: rgb(255, 255, 255);
+    font-weight: bold;
+}
