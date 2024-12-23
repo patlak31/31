@@ -2,22 +2,27 @@
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
-// Canvas boyutları
-canvas.width = 320;
-canvas.height = 480;
+// Canvas boyutlarını ekran boyutlarına göre ayarlama
+function resizeCanvas() {
+    canvas.width = window.innerWidth * 0.9; // Ekranın %90'ı genişliğinde
+    canvas.height = window.innerHeight * 0.8; // Ekranın %80'i yüksekliğinde
+}
 
-// Game variables
+window.addEventListener('resize', resizeCanvas); // Ekran boyutu değiştiğinde canvas'ı yeniden ayarla
+resizeCanvas(); // Başlangıçta canvas boyutunu ayarla
+
+// Oyun değişkenleri
 let birdY = canvas.height / 2;
 let birdVelocity = 0;
 let birdFlapStrength = -6;
 let gravity = 0.25;
-let birdWidth = 50;
-let birdHeight = 50;
+let birdWidth = canvas.width * 0.1; // Kuş genişliği ekranın %10'u kadar
+let birdHeight = canvas.height * 0.1; // Kuş yüksekliği ekranın %10'u kadar
 let birdX = 50;
 let isGameOver = false;
 let pipes = [];
-let pipeWidth = 50;
-let pipeGap = 200; // Boru boşluğunu artırdık (200)
+let pipeWidth = canvas.width * 0.1;  // Boru genişliği ekranın %10'u kadar
+let pipeGap = canvas.height * 0.3;  // Boru boşluğu ekranın %30'u kadar
 let pipeSpeed = 2;
 let score = 0;
 let passedPipes = 0; // Geçilen boru sayısını takip et
@@ -25,7 +30,7 @@ let passedPipes = 0; // Geçilen boru sayısını takip et
 // Arka plan müziği
 const backgroundMusic = document.getElementById('backgroundMusic');
 
-// Load the bird image
+// Kuş görselini yükle
 let birdImage = new Image();
 birdImage.src = 'görsel/bird.png'; // Kuş görseli (bird.png)
 
@@ -42,17 +47,17 @@ function flap(event) {
 function gameLoop() {
     if (isGameOver) return;
 
-    // Clear the canvas
+    // Canvas'ı temizle
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Update bird position
+    // Kuşun pozisyonunu güncelle
     birdVelocity += gravity;
     birdY += birdVelocity;
 
-    // Draw bird (use the image instead of the rectangle)
+    // Kuşu çiz (dikdörtgen yerine görseli kullanıyoruz)
     ctx.drawImage(birdImage, birdX, birdY, birdWidth, birdHeight);
 
-    // Check for bird collision with ground
+    // Kuşun yere çarpıp çarpmadığını kontrol et
     if (birdY + birdHeight > canvas.height) {
         birdY = canvas.height - birdHeight;
         birdVelocity = 0;
@@ -60,7 +65,7 @@ function gameLoop() {
         gameOver();
     }
 
-    // Update and draw pipes
+    // Boruları güncelle ve çiz
     if (pipes.length === 0 || pipes[pipes.length - 1].x < canvas.width - 200) {
         createPipe();
     }
@@ -69,28 +74,23 @@ function gameLoop() {
         let pipe = pipes[i];
         pipe.x -= pipeSpeed;
 
-        // Boru geçişi kontrolü ve puan ekleme
-        if (pipe.x + pipeWidth < birdX && !pipe.passed) {
-            score++; // Borudan geçince skoru arttır
-            pipe.passed = true; // Bu boruyu geçtiğimizi işaretle
-        }
-
-        // Draw top and bottom pipes
+        // Boruların üst ve alt kısmını çiz
         ctx.fillStyle = "#008000";
         ctx.fillRect(pipe.x, 0, pipeWidth, pipe.topHeight);
         ctx.fillRect(pipe.x, pipe.topHeight + pipeGap, pipeWidth, canvas.height - pipe.topHeight - pipeGap);
 
-        // Check for collisions
+        // Boru geçişini kontrol et
         if (birdX + birdWidth > pipe.x && birdX < pipe.x + pipeWidth &&
             (birdY < pipe.topHeight || birdY + birdHeight > pipe.topHeight + pipeGap)) {
             isGameOver = true;
             gameOver();
         }
 
-        // Boruların ekranın dışına çıkması
+        // Borulardan geçtiğimizde
         if (pipe.x + pipeWidth < 0) {
             pipes.splice(i, 1);
             i--;
+            score++;  // Borudan geçince skoru arttır
         }
     }
 
@@ -141,75 +141,3 @@ window.onload = function() {
     backgroundMusic.volume = 0.3;  // 0.0 ile 1.0 arasında bir değer
     gameLoop();  // Oyun döngüsünü başlat
 };
-
-
-// Ses dosyalarını alıyoruz
-const pipePassSound = document.getElementById('pipePassSound');
-const gameOverSound = document.getElementById('gameOverSound');
-
-// Game loop fonksiyonundaki güncellenmiş bölümler
-function gameLoop() {
-    if (isGameOver) return;
-
-    // Canvas'ı temizle
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    // Kuşun pozisyonunu güncelle
-    birdVelocity += gravity;
-    birdY += birdVelocity;
-
-    // Kuşu çiz (dikdörtgen yerine görseli kullanıyoruz)
-    ctx.drawImage(birdImage, birdX, birdY, birdWidth, birdHeight);
-
-    // Kuşun yere çarpıp çarpmadığını kontrol et
-    if (birdY + birdHeight > canvas.height) {
-        birdY = canvas.height - birdHeight;
-        birdVelocity = 0;
-        isGameOver = true;
-        gameOver();
-        gameOverSound.play(); // Çarpma sesini çal
-    }
-
-    // Boruları güncelle ve çiz
-    if (pipes.length === 0 || pipes[pipes.length - 1].x < canvas.width - 200) {
-        createPipe();
-    }
-
-    for (let i = 0; i < pipes.length; i++) {
-        let pipe = pipes[i];
-        pipe.x -= pipeSpeed;
-
-        // Boruların üst ve alt kısmını çiz
-        ctx.fillStyle = "#008000";
-        ctx.fillRect(pipe.x, 0, pipeWidth, pipe.topHeight);
-        ctx.fillRect(pipe.x, pipe.topHeight + pipeGap, pipeWidth, canvas.height - pipe.topHeight - pipeGap);
-
-        // Boru geçişini kontrol et
-        if (birdX + birdWidth > pipe.x && birdX < pipe.x + pipeWidth &&
-            (birdY < pipe.topHeight || birdY + birdHeight > pipe.topHeight + pipeGap)) {
-            // Çarpma durumunda oyun bitir
-            isGameOver = true;
-            gameOver();
-            gameOverSound.play(); // Çarpma sesini çal
-        }
-
-        // Borulardan geçtiğimizde
-        if (pipe.x + pipeWidth < 0) {
-            pipes.splice(i, 1);
-            i--;
-            score++;  // Borudan geçince skoru arttır
-
-            // Boru geçişi sesini her defasında çal
-            pipePassSound.currentTime = 0;  // Sesin başlangıcına dön
-            pipePassSound.play(); // Boru geçişi sesini çal
-        }
-    }
-
-    // Skoru çiz
-    ctx.fillStyle = "#000";
-    ctx.font = "20px Arial";
-    ctx.fillText("Skor: " + score, 10, 30);
-
-    // Bir sonraki frame için tekrar çağır
-    requestAnimationFrame(gameLoop);
-}
