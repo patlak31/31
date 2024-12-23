@@ -2,32 +2,34 @@
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
-// Sabit canvas boyutları
+// Canvas boyutları
 canvas.width = 320;
 canvas.height = 480;
 
-// Oyun değişkenleri
+// Game variables
 let birdY = canvas.height / 2;
 let birdVelocity = 0;
 let birdFlapStrength = -6;
 let gravity = 0.25;
-let birdWidth = 50; // Kuş genişliği
-let birdHeight = 50; // Kuş yüksekliği
+let birdWidth = 50;
+let birdHeight = 50;
 let birdX = 50;
 let isGameOver = false;
 let pipes = [];
-let pipeWidth = 50;  // Boru genişliği
-let pipeGap = 200;  // Boru boşluğu
+let pipeWidth = 50;
+let pipeGap = 200;
 let pipeSpeed = 2;
 let score = 0;
-let passedPipes = 0; // Geçilen boru sayısını takip et
+let passedPipes = 0;
 
 // Arka plan müziği
 const backgroundMusic = document.getElementById('backgroundMusic');
+const pipePassSound = document.getElementById('pipePassSound');
+const gameOverSound = document.getElementById('gameOverSound');
 
-// Kuş görselini yükle
+// Load the bird image
 let birdImage = new Image();
-birdImage.src = 'görsel/bird.png'; // Kuş görseli (bird.png)
+birdImage.src = 'görsel/bird.png';
 
 // Event listeners for click events
 canvas.addEventListener('click', flap); // Masaüstü için click
@@ -42,25 +44,26 @@ function flap(event) {
 function gameLoop() {
     if (isGameOver) return;
 
-    // Canvas'ı temizle
+    // Clear the canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Kuşun pozisyonunu güncelle
+    // Update bird position
     birdVelocity += gravity;
     birdY += birdVelocity;
 
-    // Kuşu çiz (dikdörtgen yerine görseli kullanıyoruz)
+    // Draw bird (use the image instead of the rectangle)
     ctx.drawImage(birdImage, birdX, birdY, birdWidth, birdHeight);
 
-    // Kuşun yere çarpıp çarpmadığını kontrol et
+    // Check for bird collision with ground
     if (birdY + birdHeight > canvas.height) {
         birdY = canvas.height - birdHeight;
         birdVelocity = 0;
         isGameOver = true;
         gameOver();
+        gameOverSound.play(); // Çarpma sesini çal
     }
 
-    // Boruları güncelle ve çiz
+    // Update and draw pipes
     if (pipes.length === 0 || pipes[pipes.length - 1].x < canvas.width - 200) {
         createPipe();
     }
@@ -69,23 +72,30 @@ function gameLoop() {
         let pipe = pipes[i];
         pipe.x -= pipeSpeed;
 
-        // Boruların üst ve alt kısmını çiz
+        // Boru geçişi kontrolü ve puan ekleme
+        if (pipe.x + pipeWidth < birdX && !pipe.passed) {
+            score++; // Borudan geçince skoru arttır
+            pipe.passed = true; // Bu boruyu geçtiğimizi işaretle
+            pipePassSound.play(); // Boru geçişi sesini çal
+        }
+
+        // Draw top and bottom pipes
         ctx.fillStyle = "#008000";
         ctx.fillRect(pipe.x, 0, pipeWidth, pipe.topHeight);
         ctx.fillRect(pipe.x, pipe.topHeight + pipeGap, pipeWidth, canvas.height - pipe.topHeight - pipeGap);
 
-        // Boru geçişini kontrol et
+        // Check for collisions
         if (birdX + birdWidth > pipe.x && birdX < pipe.x + pipeWidth &&
             (birdY < pipe.topHeight || birdY + birdHeight > pipe.topHeight + pipeGap)) {
             isGameOver = true;
             gameOver();
+            gameOverSound.play(); // Çarpma sesini çal
         }
 
-        // Borulardan geçtiğimizde
+        // Boruların ekranın dışına çıkması
         if (pipe.x + pipeWidth < 0) {
             pipes.splice(i, 1);
             i--;
-            score++;  // Borudan geçince skoru arttır
         }
     }
 
@@ -122,7 +132,7 @@ function restartGame() {
     score = 0;
     pipes = [];
     isGameOver = false;
-    passedPipes = 0; // Geçilen boru sayısını sıfırla
+    passedPipes = 0;
     document.getElementById('restartButton').style.display = 'none'; // Hide restart button
     backgroundMusic.play();  // Müziği tekrar başlat
     gameLoop();  // Oyun döngüsünü tekrar başlat
@@ -133,6 +143,6 @@ window.onload = function() {
     document.getElementById('game-container').style.display = 'block';
     backgroundMusic.play();  // Başlangıçta müziği başlat
     backgroundMusic.loop = true;  // Müziği döngüye al
-    backgroundMusic.volume = 0.3;  // 0.0 ile 1.0 arasında bir değer
+    backgroundMusic.volume = 0.3;  // Ses seviyesini ayarla
     gameLoop();  // Oyun döngüsünü başlat
 };
