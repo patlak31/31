@@ -44,8 +44,8 @@ body, html {
 /* Oyun alanının konteyneri */
 #game-container {
     position: relative;
-    width: 100vw; /* Ekran genişliği */
-    height: 100vh; /* Ekran yüksekliği */
+    width: 320px; /* Sabit genişlik */
+    height: 480px; /* Sabit yükseklik */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -58,8 +58,8 @@ body, html {
 /* Canvas ayarları */
 canvas {
     display: block;
-    width: 100%;  /* Ekran boyutuna uyumlu */
-    height: 100%; /* Ekran boyutuna uyumlu */
+    width: 100%;  /* Ekranın genişliğine göre %100 genişlik */
+    height: 100%; /* Ekranın yüksekliğine göre %100 yükseklik */
 }
 
 /* Yeniden Başla butonu */
