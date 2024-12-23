@@ -2,27 +2,22 @@
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
-// Canvas boyutlarını ekran boyutlarına göre ayarlama
-function resizeCanvas() {
-    canvas.width = window.innerWidth * 0.9; // Ekranın %90'ı genişliğinde
-    canvas.height = window.innerHeight * 0.8; // Ekranın %80'i yüksekliğinde
-}
-
-window.addEventListener('resize', resizeCanvas); // Ekran boyutu değiştiğinde canvas'ı yeniden ayarla
-resizeCanvas(); // Başlangıçta canvas boyutunu ayarla
+// Sabit canvas boyutları
+canvas.width = 320;
+canvas.height = 480;
 
 // Oyun değişkenleri
 let birdY = canvas.height / 2;
 let birdVelocity = 0;
 let birdFlapStrength = -6;
 let gravity = 0.25;
-let birdWidth = canvas.width * 0.1; // Kuş genişliği ekranın %10'u kadar
-let birdHeight = canvas.height * 0.1; // Kuş yüksekliği ekranın %10'u kadar
+let birdWidth = 50; // Kuş genişliği
+let birdHeight = 50; // Kuş yüksekliği
 let birdX = 50;
 let isGameOver = false;
 let pipes = [];
-let pipeWidth = canvas.width * 0.1;  // Boru genişliği ekranın %10'u kadar
-let pipeGap = canvas.height * 0.3;  // Boru boşluğu ekranın %30'u kadar
+let pipeWidth = 50;  // Boru genişliği
+let pipeGap = 200;  // Boru boşluğu
 let pipeSpeed = 2;
 let score = 0;
 let passedPipes = 0; // Geçilen boru sayısını takip et
