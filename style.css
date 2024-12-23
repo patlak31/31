@@ -31,12 +31,11 @@ body, html {
     text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5); /* Metni daha belirgin hale getirmek için gölge */
 }
 
+
 /* Oyun başlığının stili */
 #gameTitle {
     position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%); /* Ekranın ortasında görünmesini sağlamak */
+    top: 10px;
     font-size: 24px;
     font-weight: bold;
     color: rgb(0, 0, 0);
@@ -77,24 +76,4 @@ canvas {
     background-color: rgba(38, 38, 38, 0.97);
     color: rgb(255, 255, 255);
     font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-/* Yeniden başla butonuna hover efekti */
-#restartButton:hover {
-    background-color: rgba(255, 100, 100, 0.9);  /* Buton üzerine gelince rengini değiştir */
-}
-
-/* Ekran küçük olduğunda oyun alanının boyutlandırılması */
-@media screen and (max-width: 480px) {
-    #game-container {
-        width: 280px;  /* Ekran küçükse oyun alanı boyutunu küçült */
-        height: 420px; /* Ekran küçükse oyun alanı boyutunu küçült */
-    }
-
-    /* Skor fontunu küçük ekranlarda küçült */
-    #footerText, #gameTitle {
-        font-size: 18px;
-    }
 }
