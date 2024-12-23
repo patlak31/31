@@ -31,7 +31,6 @@ body, html {
     text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5); /* Metni daha belirgin hale getirmek için gölge */
 }
 
-
 /* Oyun başlığının stili */
 #gameTitle {
     position: absolute;
@@ -45,8 +44,8 @@ body, html {
 /* Oyun alanının konteyneri */
 #game-container {
     position: relative;
-    width: 320px; /* Sabit genişlik */
-    height: 480px; /* Sabit yükseklik */
+    width: 100vw; /* Ekran genişliği */
+    height: 100vh; /* Ekran yüksekliği */
     display: flex;
     justify-content: center;
     align-items: center;
